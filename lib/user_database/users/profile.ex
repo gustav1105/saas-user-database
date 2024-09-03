@@ -8,13 +8,16 @@ defmodule UserDatabase.Users.Profile do
     field :last_name, :string
     field :dob, :naive_datetime
     timestamps()
+
+    belongs_to :locale, UserDatabase.Users.Locale
   end
 
   @required_params [:first_name, :last_name, :dob]
+  @optional_params [:locale_id]
 
   def changeset(struct = %UserDatabase.Users.Profile{}, params) do
     struct
-    |> cast(params, @required_params)
+    |> cast(params, @required_params ++ @optional_params)
     |> validate_required(@required_params)
     |> validate_dob()
     |> validate_length(:first_name, min: 2, max: 22)
