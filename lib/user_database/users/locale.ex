@@ -60,4 +60,16 @@ defmodule UserDatabase.Users.Locale do
       |> validate_inclusion(:country, @countries)
       |> validate_length(:post_code, min: 3, max: 19)
   end
+
+  def by_country(query, country) do
+   from l in query,
+    where: ilike(l.country, ^country),
+    select: l
+  end
+
+  def by_post_code(query, post_code) do
+    from l in query,
+      where: ilike(l.post_code, ^post_code),
+    select: l
+  end
 end

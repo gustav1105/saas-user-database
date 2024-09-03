@@ -58,5 +58,13 @@ defmodule UserDatabase.Users.Profile do
       changeset
     end
   end
+
+  def by_locale(query, country, post_code) do
+    from p in query,
+      join: l in assoc(p, :locale),
+      where: ilike(l.country, ^country) and
+             ilike(l.post_code, ^post_code),
+    select: p
+  end
 end
 
