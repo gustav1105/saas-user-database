@@ -51,6 +51,7 @@ defmodule UserDatabase.Users.Locale do
     timestamps()
 
     has_many :profile, UserDatabase.Users.Profile
+    has_one :user, UserDatabase.Users.User
   end
 
   def changeset(struct = %UserDatabase.Users.Locale{}, params) do

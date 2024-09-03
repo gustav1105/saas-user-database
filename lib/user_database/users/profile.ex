@@ -10,6 +10,7 @@ defmodule UserDatabase.Users.Profile do
     timestamps()
 
     belongs_to :locale, UserDatabase.Users.Locale
+    has_one :user, UserDatabase.Users.User
   end
 
   @required_params [:first_name, :last_name, :dob]
@@ -48,7 +49,15 @@ defmodule UserDatabase.Users.Profile do
         fragment("EXTRACT(YEAR FROM ?)", p.dob) >= ^end_year,
       select: p
   end
-  
+
+  def by_locale(query, country, post_code) do
+    from p in query,
+      join: l in assoc(p, :locale),
+      where: ilike(l.country, ^country) and
+             ilike(l.post_code, ^post_code),
+    select: p
+  end
+
   defp validate_dob(changeset) do
     dob = get_field(changeset, :dob)
 
@@ -59,12 +68,6 @@ defmodule UserDatabase.Users.Profile do
     end
   end
 
-  def by_locale(query, country, post_code) do
-    from p in query,
-      join: l in assoc(p, :locale),
-      where: ilike(l.country, ^country) and
-             ilike(l.post_code, ^post_code),
-    select: p
-  end
+
 end
 
